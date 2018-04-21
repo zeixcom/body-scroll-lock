@@ -95,6 +95,8 @@ export const disableBodyScroll = (targetElement: any, reserveScrollBarWidth: boo
           handleScroll(event, targetElement);
         }
       };
+
+      setPaddingRightForScrollbarWidth();
     }
   } else {
     setOverflowHidden(reserveScrollBarWidth);
@@ -115,19 +117,23 @@ export const clearAllBodyScrollLocks = (reserveScrollBarWidth: boolean = true): 
 
     // Reset initial clientY
     initialClientY = -1;
+
+    restorePaddingRightForScrollbarWidth();
   } else {
-    setOverflowAuto();
+    setOverflowAuto(reserveScrollBarWidth);
 
     firstTargetElement = null;
   }
 };
 
-export const enableBodyScroll = (targetElement: any): void => {
+export const enableBodyScroll = (targetElement: any, reserveScrollBarWidth: boolean = true): void => {
   if (isIosDevice) {
     targetElement.ontouchstart = null;
     targetElement.ontouchmove = null;
+
+    restorePaddingRightForScrollbarWidth();
   } else if (firstTargetElement === targetElement) {
-    setOverflowAuto();
+    setOverflowAuto(reserveScrollBarWidth);
 
     firstTargetElement = null;
   }
